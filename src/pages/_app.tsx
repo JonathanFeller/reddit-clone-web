@@ -28,7 +28,7 @@ const client = createClient({
     cacheExchange({
       updates: {
         Mutation: {
-          login: (_result, args, cache, info) => {
+          login: (_result, _args, cache, _info) => {
             updateQuery<LoginMutation, MeQuery>(
               cache,
               { query: MeDocument },
@@ -44,7 +44,7 @@ const client = createClient({
               }
             );
           },
-          register: (_result, args, cache, info) => {
+          register: (_result, _args, cache, _info) => {
             updateQuery<RegisterMutation, MeQuery>(
               cache,
               { query: MeDocument },

@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 import { withUrqlClient } from "next-urql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
-interface registerProps {}
+// interface registerProps {}
 
 export const Login: React.FC<{}> = ({}) => {
   const router = useRouter();

@@ -1,5 +1,10 @@
-import { cacheExchange } from "@urql/exchange-graphcache";
-import { dedupExchange, Exchange, fetchExchange } from "urql";
+import { cacheExchange, Resolver } from "@urql/exchange-graphcache";
+import {
+  dedupExchange,
+  Exchange,
+  fetchExchange,
+  stringifyVariables,
+} from "urql";
 import {
   LoginMutation,
   MeQuery,
@@ -32,6 +37,11 @@ export const createUrqlClient = (ssrExchange: any) => ({
   exchanges: [
     dedupExchange,
     cacheExchange({
+      resolvers: {
+        Query: {
+          posts: cursorPagination(),
+        },
+      },
       updates: {
         Mutation: {
           login: (_result, _args, cache, _info) => {
@@ -82,3 +92,29 @@ export const createUrqlClient = (ssrExchange: any) => ({
     fetchExchange,
   ],
 });
+
+export const cursorPagination = (): Resolver => {
+  return (_parent, fieldArgs, cache, info) => {
+    const { parentKey: entityKey, fieldName } = info;
+
+    const allFields = cache.inspectFields(entityKey);
+    const fieldInfos = allFields.filter((info) => info.fieldName === fieldName);
+    const size = fieldInfos.length;
+    if (size === 0) {
+      return undefined;
+    }
+
+    const isCached = cache.resolveFieldByKey(
+      entityKey,
+      `${fieldName}(${stringifyVariables(fieldArgs)})`
+    );
+    info.partial = !isCached;
+
+    const results: string[] = [];
+    fieldInfos.forEach((fi) => {
+      const data = cache.resolveFieldByKey(entityKey, fi.fieldKey) as string[];
+      results.push(...data);
+    });
+    return results;
+  };
+};

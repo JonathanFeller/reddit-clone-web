@@ -11,19 +11,27 @@ export const VoteSection: React.FC<VoteSectionProps> = ({ post }) => {
   return (
     <Flex direction="column" alignItems="center">
       <IconButton
-        onClick={() => vote({ postId: post.id, value: 1 })}
+        onClick={() => {
+          if (post.voteStatus === 1) return;
+          vote({ postId: post.id, value: 1 });
+        }}
         isLoading={fetching}
         aria-label="Up"
         icon="chevron-up"
-        size="xs"
+        size="sm"
+        variantColor={post.voteStatus === 1 ? "green" : undefined}
       />
       {post.points}
       <IconButton
-        onClick={() => vote({ postId: post.id, value: -1 })}
+        onClick={() => {
+          if (post.voteStatus === -1) return;
+          vote({ postId: post.id, value: -1 });
+        }}
         isLoading={fetching}
         aria-label="Down"
         icon="chevron-down"
-        size="xs"
+        size="sm"
+        variantColor={post.voteStatus === -1 ? "red" : undefined}
       />
     </Flex>
   );

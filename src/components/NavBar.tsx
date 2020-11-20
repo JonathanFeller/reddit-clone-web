@@ -25,9 +25,11 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
     );
   } else {
     body = (
-      <Flex>
+      <Flex alignItems="center">
         <NextLink href="/create-post">
-          <Link mx={2}>Create Post</Link>
+          <Button as={Link} mx={2}>
+            Create Post
+          </Button>
         </NextLink>
         <Box mx={2}>{data.me.username}</Box>
         <Button

@@ -38,7 +38,11 @@ const Index = () => {
                 <VoteSection post={p} />
                 <Flex direction="column" ml={2} flexGrow={1}>
                   <Flex flexGrow={1} justifyContent="space-between">
-                    <Heading>{p.title}</Heading>
+                    <NextLink href="/post/id" as={`/post/${p.id}`}>
+                      <Link>
+                        <Heading>{p.title}</Heading>
+                      </Link>
+                    </NextLink>
                     <Text>Posted by {p.creator.username}</Text>
                   </Flex>
                   <Text>{p.textSnippet}</Text>

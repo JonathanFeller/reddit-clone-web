@@ -13,7 +13,11 @@ import NextLink from "next/link";
 import React, { useState } from "react";
 import { Layout } from "../components/Layout";
 import { VoteSection } from "../components/VoteSection";
-import { useDeletePostMutation, usePostsQuery } from "../generated/graphql";
+import {
+  useDeletePostMutation,
+  useMeQuery,
+  usePostsQuery,
+} from "../generated/graphql";
 import { createUrqlClient } from "../utils/createUrqlClient";
 
 const Index = () => {
@@ -21,22 +25,24 @@ const Index = () => {
     limit: 15,
     cursor: null as string | null,
   });
-  const [{ data, fetching }] = usePostsQuery({
+  const [{ data: postData, fetching }] = usePostsQuery({
     variables,
   });
+  const [{ data: meData }] = useMeQuery();
+
   const [, deletePost] = useDeletePostMutation();
 
-  if (!fetching && !data) {
+  if (!fetching && !postData) {
     return <div>Unexpected error</div>;
   }
 
   return (
     <Layout>
-      {fetching && !data ? (
+      {fetching && !postData ? (
         <div>Loading...</div>
       ) : (
         <Stack spacing={8}>
-          {data!.posts.posts.map((p) =>
+          {postData!.posts.posts.map((p) =>
             !p ? null : (
               <Box key={p.id} p={5} shadow="md" borderWidth="1px">
                 <Flex flexGrow={1}>
@@ -52,29 +58,40 @@ const Index = () => {
                     </Flex>
                     <Text>{p.textSnippet}</Text>
                   </Flex>
-                  <Flex alignItems="center">
-                    <IconButton
-                      icon="delete"
-                      aria-label="Delete Post"
-                      onClick={() => {
-                        deletePost({ id: p.id });
-                      }}
-                      variantColor="red"
-                    />
-                  </Flex>
+                  {meData?.me?.id !== p.creator.id ? null : (
+                    <Flex flexDirection="column" justifyContent="space-between">
+                      <NextLink
+                        href="/post/edit/[id]"
+                        as={`/post/edit/${p.id}`}
+                      >
+                        <IconButton
+                          as={Link}
+                          icon="edit"
+                          aria-label="Edit Post"
+                        />
+                      </NextLink>
+                      <IconButton
+                        icon="delete"
+                        aria-label="Delete Post"
+                        onClick={() => {
+                          deletePost({ id: p.id });
+                        }}
+                      />
+                    </Flex>
+                  )}
                 </Flex>
               </Box>
             )
           )}
         </Stack>
       )}
-      {data && data.posts.hasMore && (
+      {postData && postData.posts.hasMore && (
         <Flex justifyContent="center">
           <Button
             onClick={() => {
               setVariables({
                 limit: variables.limit,
-                cursor: data.posts.posts[data.posts.posts.length - 1].createdAt,
+                cursor: postData.posts.posts[postData.posts.posts.length - 1].createdAt,
               });
             }}
             isLoading={fetching}

@@ -3,14 +3,15 @@ import NextLink from "next/link";
 import { Box, Button, Flex, Heading, Link } from "@chakra-ui/core";
 import { useLogoutMutation, useMeQuery } from "../generated/graphql";
 import { useRouter } from "next/router";
+import { useApolloClient } from "@apollo/client";
 
 interface NavBarProps {}
 
 export const NavBar: React.FC<NavBarProps> = ({}) => {
   const router = useRouter();
-
-  const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
-  const [{ data }] = useMeQuery();
+  const apolloClient = useApolloClient();
+  const [logout, { loading: logoutFetching }] = useLogoutMutation();
+  const { data } = useMeQuery();
   let body = null;
 
   if (!data?.me) {
@@ -40,7 +41,7 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
           variant="link"
           onClick={async () => {
             await logout();
-            router.reload();
+            await apolloClient.resetStore();
           }}
           isLoading={logoutFetching}
         >

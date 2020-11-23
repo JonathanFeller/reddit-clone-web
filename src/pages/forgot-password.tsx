@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { InputField } from "../components/InputField";
 import { Wrapper } from "../components/Wrapper";
 import { useForgotPasswordMutation } from "../generated/graphql";
+import { withApollo } from "../utils/withApollo";
 
 export const ForgotPassword: React.FC<{}> = ({}) => {
   const [complete, setComplete] = useState(false);
@@ -44,4 +45,4 @@ export const ForgotPassword: React.FC<{}> = ({}) => {
   );
 };
 
-export default ForgotPassword;
+export default withApollo({ ssr: false })(ForgotPassword);

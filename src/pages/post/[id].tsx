@@ -3,6 +3,7 @@ import { Box, Flex, Heading } from "@chakra-ui/core";
 import { Layout } from "../../components/Layout";
 import { useGetPostFromUrl } from "../../utils/useGetPostFromUrl";
 import { EditDeletePostButtons } from "../../utils/EditDeletePostButtons";
+import { withApollo } from "../../utils/withApollo";
 
 export const Post = ({}) => {
   const {
@@ -41,4 +42,4 @@ export const Post = ({}) => {
   );
 };
 
-export default Post;
+export default withApollo({ ssr: true })(Post);

@@ -1,9 +1,9 @@
 import { Box, Button, Flex, Heading, Link, Stack, Text } from "@chakra-ui/core";
 import NextLink from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { Layout } from "../components/Layout";
 import { VoteSection } from "../components/VoteSection";
-import { PostsQuery, usePostsQuery } from "../generated/graphql";
+import { usePostsQuery } from "../generated/graphql";
 import { EditDeletePostButtons } from "../utils/EditDeletePostButtons";
 import { withApollo } from "../utils/withApollo";
 

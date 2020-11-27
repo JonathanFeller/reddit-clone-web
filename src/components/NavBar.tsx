@@ -17,17 +17,19 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
     body = (
       <>
+        <Button as={Link} mx={2}>
+          Login
+        </Button>
         <NextLink href="/login">
-          <Link m="0 4px">Login</Link>
-        </NextLink>
-        <NextLink href="/register">
-          <Link m="0 4px">Register</Link>
+          <NextLink href="/register">
+            <Link mx={2}>Register</Link>
+          </NextLink>
         </NextLink>
       </>
     );
   } else {
     body = (
-      <Flex alignItems="center">
+      <>
         <NextLink href="/create-post">
           <Button as={Link} mx={2}>
             Create Post
@@ -45,19 +47,21 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
         >
           Logout
         </Button>
-      </Flex>
+      </>
     );
     //Logged in
   }
 
   return (
-    <Flex bg="tan" p={4} justifyContent="space-between" alignItems="center">
-      <NextLink href="/">
-        <Link>
-          <Heading>Reddit-Clone</Heading>
-        </Link>
-      </NextLink>
-      {body}
+    <Flex bg="tan" p={4} justifyContent="center">
+      <Flex flexGrow={1} justifyContent="space-between" maxW={800}>
+        <NextLink href="/">
+          <Link>
+            <Heading>Reddit-Clone</Heading>
+          </Link>
+        </NextLink>
+        <Flex alignItems="center">{body}</Flex>
+      </Flex>
     </Flex>
   );
 };

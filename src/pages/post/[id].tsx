@@ -21,7 +21,9 @@ export const Post = ({}) => {
   if (!data?.post) {
     return (
       <Layout>
-        <Box>Wow, such empty</Box>
+        <Flex flexGrow={1} justifyContent="center">
+          Wow, such empty. 🐈
+        </Flex>
       </Layout>
     );
   }

@@ -17,13 +17,13 @@ export const NavBar: React.FC<NavBarProps> = ({}) => {
 
     body = (
       <>
-        <Button as={Link} mx={2}>
-          Login
-        </Button>
         <NextLink href="/login">
-          <NextLink href="/register">
-            <Link mx={2}>Register</Link>
-          </NextLink>
+          <Button as={Link} mx={2}>
+            Login
+          </Button>
+        </NextLink>
+        <NextLink href="/register">
+          <Link mx={2}>Register</Link>
         </NextLink>
       </>
     );
